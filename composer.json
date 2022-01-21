@@ -1,0 +1,15 @@
+{
+    "name": "asus/untitled2",
+    "autoload": {
+        "psr-4": {
+            "Client\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Margarita",
+            "email": "rita_sidel@mail.ru"
+        }
+    ],
+    "require": {}
+}
