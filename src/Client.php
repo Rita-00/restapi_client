@@ -156,4 +156,93 @@ class Client{
 
     }
 
+    public function add_file($filepath,$name)
+    {
+        if(!file_exists(realpath($filepath))) {
+            return "{\"status\"': \"400\",\"message\": \"file didn't exist \"}";
+        }
+
+        $data = json_encode(['file' => $filepath,'name'=>$name], JSON_UNESCAPED_UNICODE);
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->url.'/file/add/'.$name);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+        $output = curl_exec($ch);
+
+        curl_close($ch);
+
+        if ($output === FALSE) {
+            return "{\"status\"': \"400\",\"message\": \"cURL Error: \". curl_error($ch)}";
+        } else {
+            return "{\"status\"': \"200\",\"message\": \"OK\"}";
+        }
+
+    }
+
+    public function get_file()
+    {
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->url.'/file/get');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $output = curl_exec($ch);
+
+        curl_close($ch);
+
+        if ($output === FALSE) {
+            return "{\"status\"': \"400\",\"message\": \"cURL Error: \". curl_error($ch)}";
+        } else {
+            return "{\"status\"': \"200\",\"message\": $output}";
+        }
+
+    }
+
+    public function get_file_by_id($id)
+    {
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->url.'/file/get/'.$id);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $output = curl_exec($ch);
+
+        curl_close($ch);
+
+        if ($output === FALSE) {
+            return "{\"status\"': \"400\",\"message\": \"cURL Error: \". curl_error($ch)}";
+        } else {
+            return "{\"status\"': \"200\",\"message\": $output}";
+        }
+
+    }
+
+    public function del_file($id,$filepath,$name)
+    {
+        $data = json_encode(['id'=>$id,'file' => $filepath,'name'=>$name], JSON_UNESCAPED_UNICODE);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->url.'file/del/'.$id);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $output = curl_exec($ch);
+
+        curl_close($ch);
+
+        if ($output === FALSE) {
+            return "{\"status\"': \"400\",\"message\": \"cURL Error: \". curl_error($ch)}";
+        } else {
+            return "{\"status\"': \"200\",\"message\": \"OK\"}";
+        }
+
+    }
+
 }
